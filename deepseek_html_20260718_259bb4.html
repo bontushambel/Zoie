@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iconography · digital storefront</title>
+    <!-- Font Awesome (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f7f5f0;
+            color: #1e1e1e;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .shop-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #dcd8d0;
+            padding-bottom: 1.2rem;
+        }
+
+        .shop-header h1 {
+            font-weight: 600;
+            font-size: 2.2rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #2d2a24, #4d463c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .shop-header h1 i {
+            margin-right: 10px;
+            color: #b8a48c;
+            -webkit-text-fill-color: #b8a48c;
+        }
+
+        .cart-badge {
+            background: #2d2a24;
+            color: #f2ede6;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+            transition: 0.2s;
+        }
+
+        .cart-badge i {
+            font-size: 1.2rem;
+            color: #d4c5b2;
+        }
+
+        .cart-badge span {
+            background: #b8a48c;
+            color: #1e1e1e;
+            padding: 0.15rem 0.7rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 4px;
+        }
+
+        /* filter bar (minimal) */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.5rem;
+            margin-bottom: 2.5rem;
+            align-items: center;
+        }
+
+        .filter-bar .tag {
+            background: #ece7df;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 450;
+            color: #2b2823;
+            border: 1px solid transparent;
+            transition: 0.2s;
+            cursor: default;
+        }
+
+        .filter-bar .tag i {
+            margin-right: 6px;
+            color: #8f7e6a;
+        }
+
+        .filter-bar .tag.active {
+            background: #2d2a24;
+            color: #f2ede6;
+            border-color: #2d2a24;
+        }
+
+        .filter-bar .tag.active i {
+            color: #d4c5b2;
+        }
+
+        /* grid */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem 1.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* card */
+        .icon-card {
+            background: #fffffffa;
+            border-radius: 28px;
+            padding: 1.4rem 0.8rem 1.2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.02);
+            transition: transform 0.15s ease, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #efebe6;
+            backdrop-filter: blur(2px);
+        }
+
+        .icon-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 30px -8px rgba(0,0,0,0.08);
+            border-color: #ddd6cb;
+        }
+
+        .icon-card .image-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #f3f0ea;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.9rem;
+            border: 1px solid #e6dfd6;
+        }
+
+        .icon-card .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .icon-card .image-wrapper img:hover {
+            transform: scale(1.01);
+        }
+
+        .icon-card .icon-title {
+            font-weight: 550;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+            color: #27241f;
+            margin-bottom: 0.1rem;
+            line-height: 1.3;
+        }
+
+        .icon-card .icon-sub {
+            font-size: 0.75rem;
+            color: #7f7261;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+
+        .icon-card .price {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1f1b16;
+            margin: 0.4rem 0 0.6rem;
+        }
+
+        .icon-card .price small {
+            font-weight: 400;
+            font-size: 0.7rem;
+            color: #887b6a;
+            margin-left: 4px;
+        }
+
+        .btn-add {
+            background: #1e1b17;
+            border: none;
+            color: white;
+            font-weight: 500;
+            padding: 0.6rem 0;
+            width: 80%;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+            cursor: pointer;
+            margin-top: 0.2rem;
+            border: 1px solid #2d2a24;
+        }
+
+        .btn-add i {
+            font-size: 0.9rem;
+            color: #cfc1b0;
+        }
+
+        .btn-add:hover {
+            background: #3d3730;
+            border-color: #4d463c;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+        }
+
+        .btn-add:active {
+            transform: scale(0.95);
+        }
+
+        /* empty state / footer */
+        .shop-footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid #e2dbd2;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #5d5346;
+            font-size: 0.9rem;
+        }
+
+        .shop-footer i {
+            margin: 0 4px;
+            color: #b5a18b;
+        }
+
+        /* image fallback */
+        .image-wrapper .placeholder-icon {
+            font-size: 3rem;
+            color: #b7a897;
+            opacity: 0.4;
+        }
+
+        /* responsive */
+        @media (max-width: 600px) {
+            body { padding: 1.2rem 0.8rem; }
+            .shop-header h1 { font-size: 1.8rem; }
+            .icon-grid { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- header -->
+    <header class="shop-header">
+        <h1><i class="fas fa-pen-fancy"></i> icon·studio</h1>
+        <div class="cart-badge">
+            <i class="fas fa-shopping-bag"></i> cart
+            <span id="cartCount">0</span>
+        </div>
+    </header>
+
+    <!-- filter (static / decorative) -->
+    <div class="filter-bar">
+        <span class="tag active"><i class="fas fa-th"></i> all icons</span>
+        <span class="tag"><i class="far fa-star"></i> featured</span>
+        <span class="tag"><i class="fas fa-tag"></i> minimal</span>
+        <span class="tag"><i class="fas fa-arrow-up"></i> new</span>
+        <span style="margin-left: auto; opacity: 0.6; font-size: 0.85rem;"><i class="fas fa-circle"></i> 16 icons</span>
+    </div>
+
+    <!-- icon grid -->
+    <div class="icon-grid" id="iconGrid"></div>
+
+    <!-- footer -->
+    <div class="shop-footer">
+        <span><i class="far fa-copyright"></i> icon·studio — digital icons</span>
+        <span><i class="fas fa-credit-card"></i> · <i class="fab fa-paypal"></i> checkout</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ------------------------------------------------------------
+        // IMAGE LIST (exactly as uploaded – all filenames from prompt)
+        // ------------------------------------------------------------
+        const imageFilenames = [
+            "-5848072967282167192_121.jpg",
+            "-5931342307158330333_121.jpg",
+            "-5974557035431315110_121.jpg",
+            "-5976598046843800617_121.jpg",
+            "-6005860303272790639_120.jpg",
+            "IMG_20260719_011920_144.jpg",
+            "IMG_20260719_011954_524.jpg",
+            "IMG_20260719_011958_447.jpg",
+            "IMG_20260719_012002_689.jpg",
+            "IMG_20260719_012005_479.jpg",
+            "IMG_20260719_012015_989.jpg",
+            "IMG_20260719_012128_866.jpg",
+            "IMG_20260719_012129_197.jpg",
+            "IMG_20260719_012129_338.jpg",
+            "IMG_20260719_012129_585.jpg",
+            "IMG_20260719_012129_607.jpg"
+        ];
+
+        // generate readable titles & prices
+        function generateMetadata(filename) {
+            // extract some "name" from filename (remove extension, clean)
+            let base = filename.replace(/\.[^/.]+$/, ""); // remove extension
+            // if starts with "IMG" or number, make a more friendly name
+            let name = base;
+            if (base.startsWith("IMG_")) {
+                const parts = base.split('_');
+                if (parts.length >= 3) {
+                    // e.g. IMG_20260719_011920 -> "Icon 011920"
+                    name = "Icon " + parts[2];
+                } else {
+                    name = "Icon " + base.substring(4, 10);
+                }
+            } else if (base.startsWith("-") && base.length > 10) {
+                // numeric id: take last 4 digits as style
+                const shortId = base.slice(-6);
+                name = "Set " + shortId;
+            } else {
+                name = base.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            }
+            // shorten if too long
+            if (name.length > 24) name = name.slice(0, 22) + "…";
+
+            // random-ish price between 3.99 and 14.99
+            const seed = filename.length + filename.charCodeAt(2) || 5;
+            const price = (3.99 + (seed % 12) * 0.9).toFixed(2);
+            return { title: name, price: price };
+        }
+
+        // ----- build grid -----
+        const grid = document.getElementById('iconGrid');
+        if (!grid) return;
+
+        // clear loading 
+        grid.innerHTML = '';
+
+        // we will store cart items
+        let cartItems = 0;
+        const cartSpan = document.getElementById('cartCount');
+
+        // update cart badge
+        function updateCart() {
+            if (cartSpan) cartSpan.textContent = cartItems;
+        }
+
+        // create each card
+        imageFilenames.forEach((filename, index) => {
+            const meta = generateMetadata(filename);
+            // image source: we assume all images are in same folder (relative path)
+            // if they are on github, you may need to adjust, but we use the filename directly.
+            // you can replace with your raw github url if needed, but we keep it relative.
+            const imgSrc = filename;   // as per upload, same folder.
+
+            const card = document.createElement('div');
+            card.className = 'icon-card';
+
+            // image wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'image-wrapper';
+
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = meta.title;
+            img.loading = 'lazy';
+            // if image fails, show placeholder icon
+            img.onerror = function() {
+                this.style.display = 'none';
+                const placeholder = document.createElement('i');
+                placeholder.className = 'fas fa-image placeholder-icon';
+                placeholder.style.fontSize = '3rem';
+                placeholder.style.color = '#b7a897';
+                placeholder.style.opacity = '0.4';
+                this.parentNode.appendChild(placeholder);
+            };
+            wrapper.appendChild(img);
+            card.appendChild(wrapper);
+
+            // title
+            const titleEl = document.createElement('div');
+            titleEl.className = 'icon-title';
+            titleEl.textContent = meta.title;
+            card.appendChild(titleEl);
+
+            // subtitle (style)
+            const subEl = document.createElement('div');
+            subEl.className = 'icon-sub';
+            // pick a random style from list
+            const styles = ['vector', 'glyph', 'duotone', 'minimal', 'outline', 'filled'];
+            const styleIdx = (filename.length + index) % styles.length;
+            subEl.textContent = styles[styleIdx] + ' · ' + (index % 3 === 0 ? 'exclusive' : 'signature');
+            card.appendChild(subEl);
+
+            // price
+            const priceEl = document.createElement('div');
+            priceEl.className = 'price';
+            priceEl.innerHTML = `$${meta.price} <small>USD</small>`;
+            card.appendChild(priceEl);
+
+            // add button
+            const btn = document.createElement('button');
+            btn.className = 'btn-add';
+            btn.innerHTML = `<i class="fas fa-plus-circle"></i> add`;
+            btn.setAttribute('data-filename', filename);
+            btn.setAttribute('data-title', meta.title);
+            btn.setAttribute('data-price', meta.price);
+
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                cartItems += 1;
+                updateCart();
+                // micro feedback
+                const orig = this.innerHTML;
+                this.innerHTML = `<i class="fas fa-check"></i> added`;
+                this.style.background = '#3a6b4b';
+                this.style.borderColor = '#2b5a3a';
+                setTimeout(() => {
+                    this.innerHTML = orig;
+                    this.style.background = '#1e1b17';
+                    this.style.borderColor = '#2d2a24';
+                }, 1200);
+                // optional: log
+                console.log(`➕ added “${meta.title}” ($${meta.price})`);
+            });
+
+            card.appendChild(btn);
+            grid.appendChild(card);
+        });
+
+        // if any image missing, we still have fallback. 
+        // also add a small "demo" effect: cart reset after 5 sec? no, just keep.
+
+        // extra: if no images? but we have 16.
+        // update cart initial
+        updateCart();
+
+        // optional: click on cart badge shows alert (demo)
+        const badge = document.querySelector('.cart-badge');
+        if (badge) {
+            badge.addEventListener('click', function() {
+                if (cartItems === 0) {
+                    alert('🛒 your cart is empty. Add some beautiful icons!');
+                } else {
+                    alert(`🛒 you have ${cartItems} item${cartItems > 1 ? 's' : ''} in your cart.`);
+                }
+            });
+        }
+
+        console.log(`✅ iconography store ready · ${imageFilenames.length} icons loaded`);
+    })();
+</script>
+
+<!-- note: images are loaded from same folder as index.html. If you host on github pages, place images in root or adjust path -->
+</body>
+</html>
