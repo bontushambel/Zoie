@@ -331,7 +331,7 @@
                 "IMG_20260719_012129_607.jpg"
             ];
 
-            // generate readable titles & prices
+            // Generate readable titles & prices
             function generateMetadata(filename) {
                 let base = filename.replace(/\.[^/.]+$/, "");
                 let name = base;
@@ -381,15 +381,31 @@
                 img.src = imgSrc;
                 img.alt = meta.title;
                 img.loading = 'lazy';
+                
+                // Handle image loading errors
                 img.onerror = function() {
+                    // If image fails, show a colorful placeholder with the filename
                     this.style.display = 'none';
-                    const placeholder = document.createElement('i');
-                    placeholder.className = 'fas fa-image placeholder-icon';
-                    placeholder.style.fontSize = '3rem';
-                    placeholder.style.color = '#b7a897';
-                    placeholder.style.opacity = '0.4';
+                    const placeholder = document.createElement('div');
+                    placeholder.style.cssText = `
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: linear-gradient(135deg, #e8e0d8, #d5cdc2);
+                        color: #7a6e5e;
+                        font-size: 0.7rem;
+                        text-align: center;
+                        padding: 0.5rem;
+                        word-break: break-all;
+                    `;
+                    // Show a shortened filename as placeholder
+                    const shortName = filename.length > 20 ? filename.substring(0, 18) + '…' : filename;
+                    placeholder.textContent = shortName;
                     this.parentNode.appendChild(placeholder);
                 };
+                
                 wrapper.appendChild(img);
                 card.appendChild(wrapper);
 
