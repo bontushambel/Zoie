@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Iconography · digital storefront</title>
+    <title>Iconography · Zoie Store</title>
     <!-- Font Awesome (free icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
@@ -25,7 +25,6 @@
             margin: 0 auto;
         }
 
-        /* header */
         .shop-header {
             display: flex;
             flex-wrap: wrap;
@@ -82,7 +81,6 @@
             margin-left: 4px;
         }
 
-        /* filter bar (minimal) */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -118,7 +116,6 @@
             color: #d4c5b2;
         }
 
-        /* grid */
         .icon-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -126,7 +123,6 @@
             margin-top: 0.5rem;
         }
 
-        /* card */
         .icon-card {
             background: #fffffffa;
             border-radius: 28px;
@@ -158,6 +154,7 @@
             justify-content: center;
             margin-bottom: 0.9rem;
             border: 1px solid #e6dfd6;
+            position: relative;
         }
 
         .icon-card .image-wrapper img {
@@ -170,6 +167,20 @@
 
         .icon-card .image-wrapper img:hover {
             transform: scale(1.01);
+        }
+
+        .icon-card .image-wrapper .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e8e0d8, #d5cdc2);
+            color: #7a6e5e;
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 0.5rem;
+            word-break: break-all;
         }
 
         .icon-card .icon-title {
@@ -238,7 +249,6 @@
             transform: scale(0.95);
         }
 
-        /* empty state / footer */
         .shop-footer {
             margin-top: 4rem;
             padding-top: 1.8rem;
@@ -255,14 +265,6 @@
             color: #b5a18b;
         }
 
-        /* image fallback */
-        .image-wrapper .placeholder-icon {
-            font-size: 3rem;
-            color: #b7a897;
-            opacity: 0.4;
-        }
-
-        /* responsive */
         @media (max-width: 600px) {
             body {
                 padding: 1.2rem 0.8rem;
@@ -279,16 +281,14 @@
 <body>
     <div class="container">
 
-        <!-- header -->
         <header class="shop-header">
-            <h1><i class="fas fa-pen-fancy"></i> icon·studio</h1>
+            <h1><i class="fas fa-pen-fancy"></i> Zoie · icons</h1>
             <div class="cart-badge" id="cartBadge">
                 <i class="fas fa-shopping-bag"></i> cart
                 <span id="cartCount">0</span>
             </div>
         </header>
 
-        <!-- filter (static / decorative) -->
         <div class="filter-bar">
             <span class="tag active"><i class="fas fa-th"></i> all icons</span>
             <span class="tag"><i class="far fa-star"></i> featured</span>
@@ -297,21 +297,17 @@
             <span style="margin-left: auto; opacity: 0.6; font-size: 0.85rem;"><i class="fas fa-circle"></i> 16 icons</span>
         </div>
 
-        <!-- icon grid -->
         <div class="icon-grid" id="iconGrid"></div>
 
-        <!-- footer -->
         <div class="shop-footer">
-            <span><i class="far fa-copyright"></i> icon·studio — digital icons</span>
+            <span><i class="far fa-copyright"></i> Zoie · digital icons</span>
             <span><i class="fas fa-credit-card"></i> · <i class="fab fa-paypal"></i> checkout</span>
         </div>
     </div>
 
     <script>
         (function() {
-            // ------------------------------------------------------------
-            // IMAGE LIST — all filenames (same folder as index.html)
-            // ------------------------------------------------------------
+            // All image filenames from your repository
             const imageFilenames = [
                 "-5848072967282167192_121.jpg",
                 "-5931342307158330333_121.jpg",
@@ -331,7 +327,6 @@
                 "IMG_20260719_012129_607.jpg"
             ];
 
-            // Generate readable titles & prices
             function generateMetadata(filename) {
                 let base = filename.replace(/\.[^/.]+$/, "");
                 let name = base;
@@ -365,11 +360,12 @@
                 if (cartSpan) cartSpan.textContent = cartItems;
             }
 
-            // Build each card
             imageFilenames.forEach((filename, index) => {
                 const meta = generateMetadata(filename);
-                // Images are in the same folder as index.html
-                const imgSrc = filename;
+                
+                // Use the raw GitHub URL for images
+                // Your repository: bontushambel/Zoie
+                const imgSrc = `https://raw.githubusercontent.com/bontushambel/Zoie/main/${filename}`;
 
                 const card = document.createElement('div');
                 card.className = 'icon-card';
@@ -382,27 +378,12 @@
                 img.alt = meta.title;
                 img.loading = 'lazy';
                 
-                // Handle image loading errors
                 img.onerror = function() {
-                    // If image fails, show a colorful placeholder with the filename
                     this.style.display = 'none';
                     const placeholder = document.createElement('div');
-                    placeholder.style.cssText = `
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background: linear-gradient(135deg, #e8e0d8, #d5cdc2);
-                        color: #7a6e5e;
-                        font-size: 0.7rem;
-                        text-align: center;
-                        padding: 0.5rem;
-                        word-break: break-all;
-                    `;
-                    // Show a shortened filename as placeholder
+                    placeholder.className = 'placeholder';
                     const shortName = filename.length > 20 ? filename.substring(0, 18) + '…' : filename;
-                    placeholder.textContent = shortName;
+                    placeholder.textContent = '📷 ' + shortName;
                     this.parentNode.appendChild(placeholder);
                 };
                 
@@ -446,7 +427,7 @@
                         this.style.background = '#1e1b17';
                         this.style.borderColor = '#2d2a24';
                     }, 1200);
-                    console.log(`➕ added “${meta.title}” ($${meta.price})`);
+                    console.log(`➕ Added “${meta.title}” ($${meta.price})`);
                 });
 
                 card.appendChild(btn);
@@ -455,7 +436,6 @@
 
             updateCart();
 
-            // Click on cart badge shows summary
             const badge = document.getElementById('cartBadge');
             if (badge) {
                 badge.addEventListener('click', function() {
@@ -467,7 +447,7 @@
                 });
             }
 
-            console.log(`✅ Iconography store ready · ${imageFilenames.length} icons loaded from same folder.`);
+            console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded`);
         })();
     </script>
 </body>
