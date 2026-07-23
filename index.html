@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>zoie · Icon Store</title>
+    <title>Zoie · Icon Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         * {
@@ -281,7 +281,7 @@
     <div class="container">
 
         <header class="shop-header">
-            <h1><i class="fas fa-pen-fancy"></i> zoie · icons</h1>
+            <h1><i class="fas fa-pen-fancy"></i> Zoie · icons</h1>
             <div class="cart-badge" id="cartBadge">
                 <i class="fas fa-shopping-bag"></i> cart
                 <span id="cartCount">0</span>
@@ -299,14 +299,14 @@
         <div class="icon-grid" id="iconGrid"></div>
 
         <div class="shop-footer">
-            <span><i class="far fa-copyright"></i> zoie · digital icons</span>
+            <span><i class="far fa-copyright"></i> Zoie · digital icons</span>
             <span><i class="fas fa-credit-card"></i> · <i class="fab fa-paypal"></i> checkout</span>
         </div>
     </div>
 
     <script>
         (function() {
-            // All image filenames from your uploads
+            // All image filenames from your repository
             const imageFilenames = [
                 "-5848072967282167192_121.jpg",
                 "-5931342307158330333_121.jpg",
@@ -359,9 +359,9 @@
                 if (cartSpan) cartSpan.textContent = cartItems;
             }
 
-            // ⭐ CORRECT GitHub repository URL
-            // Username: botnushambal, Repository: zoie
-            const baseUrl = 'https://raw.githubusercontent.com/botnushambal/zoie/main/';
+            // Your GitHub repository URL
+            // Username: bontushambel, Repository: Zoie
+            const baseUrl = 'https://raw.githubusercontent.com/bontushambel/Zoie/main/';
 
             imageFilenames.forEach((filename, index) => {
                 const meta = generateMetadata(filename);
@@ -447,7 +447,7 @@
                 });
             }
 
-            console.log(`✅ zoie store ready · ${imageFilenames.length} icons loaded from ${baseUrl}`);
+            console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded from ${baseUrl}`);
         })();
     </script>
 </body>
