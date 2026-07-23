@@ -409,26 +409,62 @@
 
         .cart-actions {
             display: flex;
+            flex-direction: column;
             gap: 0.8rem;
             margin-top: 1.5rem;
+        }
+
+        .contact-options {
+            display: flex;
+            gap: 0.8rem;
             flex-wrap: wrap;
         }
 
-        .btn-checkout {
+        .btn-contact {
             flex: 1;
-            background: #2d2a24;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
+            min-width: 100px;
+            padding: 0.8rem 1rem;
             border-radius: 60px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
-            min-width: 120px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.9rem;
         }
 
-        .btn-checkout:hover {
-            background: #4d463c;
+        .btn-contact:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-sms {
+            background: #34b7f1;
+            color: white;
+        }
+
+        .btn-sms:hover {
+            background: #2a9fd6;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #1da851;
+        }
+
+        .btn-telegram {
+            background: #0088cc;
+            color: white;
+        }
+
+        .btn-telegram:hover {
+            background: #0077b3;
         }
 
         .btn-clear-cart {
@@ -440,6 +476,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
+            width: 100%;
         }
 
         .btn-clear-cart:hover {
@@ -456,6 +493,13 @@
             font-size: 3rem;
             margin-bottom: 1rem;
             opacity: 0.3;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: #7f7261;
+            margin-bottom: 0.3rem;
+            text-align: center;
         }
 
         @media (max-width: 600px) {
@@ -497,6 +541,12 @@
             }
             .floating-cart i {
                 font-size: 1rem;
+            }
+            .contact-options {
+                flex-direction: column;
+            }
+            .btn-contact {
+                min-width: unset;
             }
         }
     </style>
@@ -540,9 +590,18 @@
                 <span id="cartTotalAmount">0 ብር</span>
             </div>
             <div class="cart-actions">
-                <button class="btn-checkout" id="checkoutBtn">
-                    <i class="fas fa-sms"></i> <span id="checkoutText">Send SMS</span>
-                </button>
+                <div class="contact-label" id="contactLabel">📱 Choose how to send your order:</div>
+                <div class="contact-options">
+                    <button class="btn-contact btn-sms" id="smsBtn">
+                        <i class="fas fa-sms"></i> SMS
+                    </button>
+                    <button class="btn-contact btn-whatsapp" id="whatsappBtn">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="btn-contact btn-telegram" id="telegramBtn">
+                        <i class="fab fa-telegram-plane"></i> Telegram
+                    </button>
+                </div>
                 <button class="btn-clear-cart" id="clearCartBtn">
                     <i class="fas fa-trash"></i> <span id="clearText">Clear</span>
                 </button>
@@ -575,14 +634,30 @@
             ];
 
             // ============================================================
-            // PRICES & PHONE NUMBER
+            // CONTACT INFO
+            // ============================================================
+            const CONTACTS = {
+                sms: {
+                    number: '0940640089',
+                    label: 'SMS'
+                },
+                whatsapp: {
+                    number: '+251940640089',
+                    label: 'WhatsApp'
+                },
+                telegram: {
+                    username: 'SIPIET',
+                    label: 'Telegram'
+                }
+            };
+
+            // ============================================================
+            // PRICES
             // ============================================================
             const PRICES = {
                 A5: 400,
                 HALF: 200
             };
-
-            const PHONE_NUMBER = '0940640089';
 
             // ============================================================
             // CART MANAGEMENT (localStorage)
@@ -648,14 +723,9 @@
             }
 
             // ============================================================
-            // CHECKOUT - SMS (Opens default SMS app)
+            // BUILD ORDER MESSAGE
             // ============================================================
-            function checkoutViaSMS() {
-                if (cart.length === 0) {
-                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
-                    return;
-                }
-
+            function buildOrderMessage() {
                 let message = '🛒 Zoie Icon Store Order\n\n';
                 let total = 0;
 
@@ -669,20 +739,49 @@
                 message += `\n────────────────\n`;
                 message += `Total: ${total} ብር\n\n`;
                 message += `Thank you for your order! 🙏`;
+                return message;
+            }
 
-                const encodedMessage = encodeURIComponent(message);
-                const smsUrl = `sms:${PHONE_NUMBER}?body=${encodedMessage}`;
-
-                try {
-                    window.location.href = smsUrl;
-                } catch (e) {
-                    window.open(smsUrl, '_blank');
+            // ============================================================
+            // CHECKOUT METHODS
+            // ============================================================
+            function checkoutSMS() {
+                if (cart.length === 0) {
+                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
+                    return;
                 }
+                const message = buildOrderMessage();
+                const encodedMessage = encodeURIComponent(message);
+                const smsUrl = `sms:${CONTACTS.sms.number}?body=${encodedMessage}`;
+                window.location.href = smsUrl;
+                setTimeout(() => { clearCart();
+                    cartModal.classList.remove('active'); }, 1000);
+            }
 
-                setTimeout(() => {
-                    clearCart();
-                    cartModal.classList.remove('active');
-                }, 1000);
+            function checkoutWhatsApp() {
+                if (cart.length === 0) {
+                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
+                    return;
+                }
+                const message = buildOrderMessage();
+                const encodedMessage = encodeURIComponent(message);
+                const waUrl = `https://wa.me/${CONTACTS.whatsapp.number.replace('+', '')}?text=${encodedMessage}`;
+                window.open(waUrl, '_blank');
+                setTimeout(() => { clearCart();
+                    cartModal.classList.remove('active'); }, 1000);
+            }
+
+            function checkoutTelegram() {
+                if (cart.length === 0) {
+                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
+                    return;
+                }
+                const message = buildOrderMessage();
+                const encodedMessage = encodeURIComponent(message);
+                const tgUrl = `https://t.me/${CONTACTS.telegram.username}?text=${encodedMessage}`;
+                window.open(tgUrl, '_blank');
+                setTimeout(() => { clearCart();
+                    cartModal.classList.remove('active'); }, 1000);
             }
 
             // ============================================================
@@ -948,8 +1047,8 @@
             const footerRight = document.getElementById('footerRight');
             const cartModalTitle = document.getElementById('cartModalTitle');
             const totalLabel = document.getElementById('totalLabel');
-            const checkoutText = document.getElementById('checkoutText');
             const clearText = document.getElementById('clearText');
+            const contactLabel = document.getElementById('contactLabel');
 
             const translations = {
                 amh: {
@@ -958,11 +1057,11 @@
                     footerRight: 'መክፈያ',
                     cartModalTitle: '🛒 ጋሪዎ',
                     totalLabel: 'ጠቅላላ',
-                    checkoutText: 'ኤስኤምኤስ ላክ',
                     clearText: 'አጽዳ',
                     btnText: 'ጨምር',
                     btnInCart: 'ተጨምሯል',
-                    emptyCart: 'ጋሪዎ ባዶ ነው'
+                    emptyCart: 'ጋሪዎ ባዶ ነው',
+                    contactLabel: '📱 ትዕዛዝዎን እንዴት መላክ ይፈልጋሉ?'
                 },
                 eng: {
                     title: 'Zoie',
@@ -970,11 +1069,11 @@
                     footerRight: 'Checkout',
                     cartModalTitle: '🛒 Your Cart',
                     totalLabel: 'Total',
-                    checkoutText: 'Send SMS',
                     clearText: 'Clear',
                     btnText: 'Add',
                     btnInCart: 'in cart',
-                    emptyCart: 'Your cart is empty'
+                    emptyCart: 'Your cart is empty',
+                    contactLabel: '📱 Choose how to send your order:'
                 }
             };
 
@@ -987,8 +1086,8 @@
                 footerRight.textContent = t.footerRight;
                 cartModalTitle.textContent = t.cartModalTitle;
                 totalLabel.textContent = t.totalLabel;
-                checkoutText.textContent = t.checkoutText;
                 clearText.textContent = t.clearText;
+                contactLabel.textContent = t.contactLabel;
 
                 allCards.forEach(item => {
                     const size = item.selectedSize || 'A5';
@@ -1039,7 +1138,10 @@
                 }
             });
 
-            document.getElementById('checkoutBtn').addEventListener('click', checkoutViaSMS);
+            // Contact buttons
+            document.getElementById('smsBtn').addEventListener('click', checkoutSMS);
+            document.getElementById('whatsappBtn').addEventListener('click', checkoutWhatsApp);
+            document.getElementById('telegramBtn').addEventListener('click', checkoutTelegram);
 
             // ============================================================
             // KEYBOARD SHORTCUT - ESC to close modal
@@ -1060,7 +1162,7 @@
 
             console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded`);
             console.log(`📐 Sizes: A5 (${PRICES.A5} ETB) and Half A5 (${PRICES.HALF} ETB)`);
-            console.log(`📱 Checkout via SMS: ${PHONE_NUMBER}`);
+            console.log(`📱 Contact options: SMS (${CONTACTS.sms.number}), WhatsApp (${CONTACTS.whatsapp.number}), Telegram (@${CONTACTS.telegram.username})`);
             console.log(`💾 Cart saved in localStorage`);
         })();
     </script>
