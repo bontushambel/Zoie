@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ቅዱሳን አዶዎች · Zoie Icon Store</title>
+    <title>Zoie · Icon Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         * {
@@ -153,7 +153,7 @@
 
         .icon-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 2rem 1.8rem;
             margin-top: 0.5rem;
         }
@@ -218,43 +218,44 @@
             word-break: break-all;
         }
 
-        .icon-card .icon-title {
-            font-weight: 550;
-            font-size: 1rem;
-            letter-spacing: -0.01em;
-            color: #27241f;
-            margin-bottom: 0.1rem;
-            line-height: 1.3;
-        }
-
-        .icon-card .icon-title-amh {
-            font-size: 0.9rem;
-            color: #5d5346;
-            margin-bottom: 0.2rem;
-            font-weight: 400;
-        }
-
-        .icon-card .icon-sub {
-            font-size: 0.75rem;
-            color: #7f7261;
-            letter-spacing: 0.02em;
-            margin-bottom: 0.4rem;
-            text-transform: uppercase;
-            font-weight: 400;
-        }
-
-        .icon-card .price {
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #1f1b16;
+        .size-options {
+            display: flex;
+            gap: 0.5rem;
             margin: 0.4rem 0 0.6rem;
+            width: 100%;
+            justify-content: center;
         }
 
-        .icon-card .price small {
-            font-weight: 400;
+        .size-btn {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            border: 2px solid #dcd8d0;
+            background: white;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #5d5346;
+            transition: 0.2s;
+            flex: 1;
+            max-width: 90px;
+        }
+
+        .size-btn:hover {
+            border-color: #b8a48c;
+            background: #f3f0ea;
+        }
+
+        .size-btn.active {
+            border-color: #2d2a24;
+            background: #2d2a24;
+            color: white;
+        }
+
+        .size-btn .price-tag {
+            display: block;
             font-size: 0.7rem;
-            color: #887b6a;
-            margin-left: 4px;
+            font-weight: 600;
+            margin-top: 0.1rem;
         }
 
         .btn-add {
@@ -263,7 +264,7 @@
             color: white;
             font-weight: 500;
             padding: 0.6rem 0;
-            width: 80%;
+            width: 100%;
             border-radius: 60px;
             font-size: 0.9rem;
             display: flex;
@@ -289,6 +290,11 @@
 
         .btn-add:active {
             transform: scale(0.95);
+        }
+
+        .btn-add:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .shop-footer {
@@ -320,6 +326,7 @@
             }
             .icon-grid {
                 gap: 1.5rem;
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             }
             .header-controls {
                 gap: 0.5rem;
@@ -327,6 +334,14 @@
             .lang-toggle button {
                 padding: 0.3rem 0.7rem;
                 font-size: 0.75rem;
+            }
+            .size-btn {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+                max-width: 70px;
+            }
+            .size-btn .price-tag {
+                font-size: 0.6rem;
             }
         }
     </style>
@@ -366,75 +381,6 @@
     <script>
         (function() {
             // ============================================================
-            // SAINT NAMES (Amharic & English) for each icon
-            // ============================================================
-            const saintData = [{
-                id: 0,
-                nameAmh: "ቅዱስ ጊዮርጊስ",
-                nameEng: "Saint George"
-            }, {
-                id: 1,
-                nameAmh: "ቅድስት ማሪያም",
-                nameEng: "Saint Mary"
-            }, {
-                id: 2,
-                nameAmh: "ቅዱስ ሚካኤል",
-                nameEng: "Saint Michael"
-            }, {
-                id: 3,
-                nameAmh: "ቅዱስ ገብርኤል",
-                nameEng: "Saint Gabriel"
-            }, {
-                id: 4,
-                nameAmh: "ቅዱስ ጴጥሮስ",
-                nameEng: "Saint Peter"
-            }, {
-                id: 5,
-                nameAmh: "ቅዱስ ጳውሎስ",
-                nameEng: "Saint Paul"
-            }, {
-                id: 6,
-                nameAmh: "ቅዱስ ዮሐንስ",
-                nameEng: "Saint John"
-            }, {
-                id: 7,
-                nameAmh: "ቅዱስ ላዛሮስ",
-                nameEng: "Saint Lazarus"
-            }, {
-                id: 8,
-                nameAmh: "ቅድስት ሄለና",
-                nameEng: "Saint Helena"
-            }, {
-                id: 9,
-                nameAmh: "ቅዱስ አንቶኒዮስ",
-                nameEng: "Saint Anthony"
-            }, {
-                id: 10,
-                nameAmh: "ቅዱስ ተክለ ሃይማኖት",
-                nameEng: "Saint Tekle Haymanot"
-            }, {
-                id: 11,
-                nameAmh: "ቅዱስ አባ ጊዮርጊስ",
-                nameEng: "Abba George"
-            }, {
-                id: 12,
-                nameAmh: "ቅድስት ሥላሴ",
-                nameEng: "Holy Trinity"
-            }, {
-                id: 13,
-                nameAmh: "ቅዱስ ኪሪሎስ",
-                nameEng: "Saint Cyril"
-            }, {
-                id: 14,
-                nameAmh: "ቅዱስ አርሴማ",
-                nameEng: "Saint Arsema"
-            }, {
-                id: 15,
-                nameAmh: "ቅዱስ ዮሴፍ",
-                nameEng: "Saint Joseph"
-            }];
-
-            // ============================================================
             // IMAGE FILENAMES (must match your repository)
             // ============================================================
             const imageFilenames = [
@@ -457,12 +403,13 @@
             ];
 
             // ============================================================
-            // PRICES in Ethiopian Birr (ETB)
+            // PRICES
+            // A5: 400 ETB, Half A5: 200 ETB
             // ============================================================
-            function getPrice(index) {
-                const prices = [450, 380, 520, 490, 350, 420, 560, 390, 470, 510, 580, 440, 530, 460, 500, 550];
-                return prices[index % prices.length];
-            }
+            const PRICES = {
+                A5: 400,
+                HALF: 200
+            };
 
             // ============================================================
             // BUILD THE GRID
@@ -474,7 +421,7 @@
             const cartSpan = document.getElementById('cartCount');
             const cartLabel = document.getElementById('cartLabel');
 
-            let currentLang = 'amh'; // 'amh' or 'eng'
+            let currentLang = 'amh';
 
             function updateCart() {
                 if (cartSpan) cartSpan.textContent = cartItems;
@@ -483,16 +430,13 @@
                 }
             }
 
-            // Store all card elements for language switching
+            // Store all card data for language switching
             let allCards = [];
 
             // Base URL for images
             const baseUrl = 'https://raw.githubusercontent.com/bontushambel/Zoie/main/';
 
             imageFilenames.forEach((filename, index) => {
-                const saint = saintData[index % saintData.length];
-                const priceETB = getPrice(index);
-
                 const card = document.createElement('div');
                 card.className = 'icon-card';
                 card.dataset.index = index;
@@ -503,7 +447,7 @@
 
                 const img = document.createElement('img');
                 img.src = baseUrl + filename;
-                img.alt = saint.nameEng;
+                img.alt = 'Icon';
                 img.loading = 'lazy';
 
                 img.onerror = function() {
@@ -517,45 +461,71 @@
                 wrapper.appendChild(img);
                 card.appendChild(wrapper);
 
-                // Title - Amharic
-                const titleAmh = document.createElement('div');
-                titleAmh.className = 'icon-title-amh';
-                titleAmh.textContent = saint.nameAmh;
-                card.appendChild(titleAmh);
+                // Size options: A5 and Half A5
+                const sizeContainer = document.createElement('div');
+                sizeContainer.className = 'size-options';
 
-                // Title - English (hidden by default)
-                const titleEng = document.createElement('div');
-                titleEng.className = 'icon-title hidden';
-                titleEng.textContent = saint.nameEng;
-                card.appendChild(titleEng);
+                // A5 button
+                const a5Btn = document.createElement('button');
+                a5Btn.className = 'size-btn active';
+                a5Btn.dataset.size = 'A5';
+                a5Btn.innerHTML = `A5 <span class="price-tag">${PRICES.A5} ብር</span>`;
+                sizeContainer.appendChild(a5Btn);
 
-                // Subtitle
-                const subEl = document.createElement('div');
-                subEl.className = 'icon-sub';
-                const styles = ['ባሕላዊ', 'ጥንታዊ', 'ኦርቶዶክስ', 'ዘመናዊ', 'ክላሲክ', 'ንጹህ'];
-                const styleIdx = index % styles.length;
-                subEl.textContent = styles[styleIdx] + ' · ' + (index % 3 === 0 ? 'ልዩ' : 'መደበኛ');
-                card.appendChild(subEl);
+                // Half A5 button
+                const halfBtn = document.createElement('button');
+                halfBtn.className = 'size-btn';
+                halfBtn.dataset.size = 'HALF';
+                halfBtn.innerHTML = `½ A5 <span class="price-tag">${PRICES.HALF} ብር</span>`;
+                sizeContainer.appendChild(halfBtn);
 
-                // Price in ETB
+                card.appendChild(sizeContainer);
+
+                // Price display (will update based on selection)
                 const priceEl = document.createElement('div');
                 priceEl.className = 'price';
-                priceEl.innerHTML = `${priceETB} <small>ብር</small>`;
+                priceEl.innerHTML = `${PRICES.A5} <small>ብር</small>`;
                 card.appendChild(priceEl);
 
                 // Add button
                 const btn = document.createElement('button');
                 btn.className = 'btn-add';
                 btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">ጨምር</span>`;
-                btn.dataset.saintAmh = saint.nameAmh;
-                btn.dataset.saintEng = saint.nameEng;
-                btn.dataset.price = priceETB;
+                btn.dataset.size = 'A5';
+                btn.dataset.price = PRICES.A5;
 
+                // Size selection logic
+                let selectedSize = 'A5';
+
+                function selectSize(size) {
+                    selectedSize = size;
+                    const price = size === 'A5' ? PRICES.A5 : PRICES.HALF;
+                    priceEl.innerHTML = `${price} <small>ብር</small>`;
+                    btn.dataset.size = size;
+                    btn.dataset.price = price;
+
+                    // Update button styles
+                    a5Btn.classList.toggle('active', size === 'A5');
+                    halfBtn.classList.toggle('active', size === 'HALF');
+                }
+
+                a5Btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectSize('A5');
+                });
+
+                halfBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectSize('HALF');
+                });
+
+                // Add to cart
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     cartItems += 1;
                     updateCart();
                     const orig = this.innerHTML;
+                    const sizeLabel = selectedSize === 'A5' ? 'A5' : '½ A5';
                     this.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨመረ' : 'added'}</span>`;
                     this.style.background = '#3a6b4b';
                     this.style.borderColor = '#2b5a3a';
@@ -564,7 +534,7 @@
                         this.style.background = '#1e1b17';
                         this.style.borderColor = '#2d2a24';
                     }, 1200);
-                    console.log(`➕ Added: ${currentLang === 'amh' ? saint.nameAmh : saint.nameEng} (${priceETB} ETB)`);
+                    console.log(`➕ Added: ${filename} (${sizeLabel}, ${btn.dataset.price} ETB)`);
                 });
 
                 card.appendChild(btn);
@@ -573,12 +543,11 @@
                 // Store reference for language switching
                 allCards.push({
                     card: card,
-                    titleAmh: titleAmh,
-                    titleEng: titleEng,
-                    saintAmh: saint.nameAmh,
-                    saintEng: saint.nameEng,
-                    price: priceETB,
-                    btn: btn
+                    btn: btn,
+                    a5Btn: a5Btn,
+                    halfBtn: halfBtn,
+                    priceEl: priceEl,
+                    selectedSize: 'A5'
                 });
             });
 
@@ -597,7 +566,7 @@
 
             const translations = {
                 amh: {
-                    title: 'Zoie · ቅዱሳን አዶዎች',
+                    title: 'Zoie · አዶዎች',
                     filterAll: 'ሁሉም',
                     filterFeatured: 'ተለይተው',
                     filterMinimal: 'ዝቅተኛ',
@@ -609,7 +578,7 @@
                     footerRight: 'መክፈያ'
                 },
                 eng: {
-                    title: 'Zoie · Icon Store',
+                    title: 'Zoie · Icons',
                     filterAll: 'All',
                     filterFeatured: 'Featured',
                     filterMinimal: 'Minimal',
@@ -626,40 +595,24 @@
                 currentLang = lang;
                 const t = translations[lang];
 
-                // Header
                 storeTitle.textContent = t.title;
-
-                // Filters
                 filterAll.textContent = t.filterAll;
                 filterFeatured.textContent = t.filterFeatured;
                 filterMinimal.textContent = t.filterMinimal;
                 iconsLabel.textContent = t.iconsLabel;
-
-                // Cart
                 cartLabel.textContent = t.cart;
-                updateCart();
-
-                // Footer
                 footerLeft.textContent = t.footerLeft;
                 footerRight.textContent = t.footerRight;
 
-                // Cards
                 allCards.forEach(item => {
-                    if (lang === 'amh') {
-                        item.titleAmh.classList.remove('hidden');
-                        item.titleEng.classList.add('hidden');
-                    } else {
-                        item.titleAmh.classList.add('hidden');
-                        item.titleEng.classList.remove('hidden');
-                    }
-                    // Update button text
                     const btnText = item.btn.querySelector('.btn-text');
                     if (btnText) {
                         btnText.textContent = t.btnText;
                     }
                 });
 
-                // Toggle button styles
+                updateCart();
+
                 langAmhBtn.classList.toggle('active', lang === 'amh');
                 langEngBtn.classList.toggle('active', lang === 'eng');
             }
@@ -686,14 +639,11 @@
             // ============================================================
             // INITIALIZE
             // ============================================================
-            // Set initial language to Amharic
             setLanguage('amh');
-
-            // Update icon count
             document.getElementById('iconCount').textContent = imageFilenames.length;
 
             console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded from ${baseUrl}`);
-            console.log('🔄 Language toggle available: Amharic / English');
+            console.log('📐 Sizes: A5 (400 ETB) and Half A5 (200 ETB)');
         })();
     </script>
 </body>
