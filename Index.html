@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Iconography · Zoie Store</title>
-    <!-- Font Awesome (free icons) -->
+    <title>zoie · Icon Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
         * {
@@ -282,7 +281,7 @@
     <div class="container">
 
         <header class="shop-header">
-            <h1><i class="fas fa-pen-fancy"></i> Zoie · icons</h1>
+            <h1><i class="fas fa-pen-fancy"></i> zoie · icons</h1>
             <div class="cart-badge" id="cartBadge">
                 <i class="fas fa-shopping-bag"></i> cart
                 <span id="cartCount">0</span>
@@ -300,14 +299,14 @@
         <div class="icon-grid" id="iconGrid"></div>
 
         <div class="shop-footer">
-            <span><i class="far fa-copyright"></i> Zoie · digital icons</span>
+            <span><i class="far fa-copyright"></i> zoie · digital icons</span>
             <span><i class="fas fa-credit-card"></i> · <i class="fab fa-paypal"></i> checkout</span>
         </div>
     </div>
 
     <script>
         (function() {
-            // All image filenames from your repository
+            // All image filenames from your uploads
             const imageFilenames = [
                 "-5848072967282167192_121.jpg",
                 "-5931342307158330333_121.jpg",
@@ -360,12 +359,13 @@
                 if (cartSpan) cartSpan.textContent = cartItems;
             }
 
+            // ⭐ CORRECT GitHub repository URL
+            // Username: botnushambal, Repository: zoie
+            const baseUrl = 'https://raw.githubusercontent.com/botnushambal/zoie/main/';
+
             imageFilenames.forEach((filename, index) => {
                 const meta = generateMetadata(filename);
-                
-                // Use the raw GitHub URL for images
-                // Your repository: bontushambel/Zoie
-                const imgSrc = `https://raw.githubusercontent.com/bontushambel/Zoie/main/${filename}`;
+                const imgSrc = baseUrl + filename;
 
                 const card = document.createElement('div');
                 card.className = 'icon-card';
@@ -377,7 +377,7 @@
                 img.src = imgSrc;
                 img.alt = meta.title;
                 img.loading = 'lazy';
-                
+
                 img.onerror = function() {
                     this.style.display = 'none';
                     const placeholder = document.createElement('div');
@@ -386,7 +386,7 @@
                     placeholder.textContent = '📷 ' + shortName;
                     this.parentNode.appendChild(placeholder);
                 };
-                
+
                 wrapper.appendChild(img);
                 card.appendChild(wrapper);
 
@@ -447,7 +447,7 @@
                 });
             }
 
-            console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded`);
+            console.log(`✅ zoie store ready · ${imageFilenames.length} icons loaded from ${baseUrl}`);
         })();
     </script>
 </body>
