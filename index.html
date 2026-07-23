@@ -17,6 +17,7 @@
             background: #f7f5f0;
             color: #1e1e1e;
             padding: 2rem 1.5rem;
+            padding-bottom: 6rem;
         }
 
         .container {
@@ -84,78 +85,6 @@
 
         .lang-toggle button:hover:not(.active) {
             background: #ddd6cb;
-        }
-
-        .cart-badge {
-            background: #2d2a24;
-            color: #f2ede6;
-            padding: 0.6rem 1.4rem;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
-            transition: 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .cart-badge i {
-            font-size: 1.2rem;
-            color: #d4c5b2;
-        }
-
-        .cart-badge span {
-            background: #b8a48c;
-            color: #1e1e1e;
-            padding: 0.15rem 0.7rem;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-left: 4px;
-        }
-
-        .cart-badge .cart-total {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            margin-left: 2px;
-        }
-
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem 1.5rem;
-            margin-bottom: 2.5rem;
-            align-items: center;
-        }
-
-        .filter-bar .tag {
-            background: #ece7df;
-            padding: 0.4rem 1.2rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 450;
-            color: #2b2823;
-            border: 1px solid transparent;
-            transition: 0.2s;
-            cursor: default;
-        }
-
-        .filter-bar .tag i {
-            margin-right: 6px;
-            color: #8f7e6a;
-        }
-
-        .filter-bar .tag.active {
-            background: #2d2a24;
-            color: #f2ede6;
-            border-color: #2d2a24;
-        }
-
-        .filter-bar .tag.active i {
-            color: #d4c5b2;
         }
 
         .icon-grid {
@@ -335,6 +264,53 @@
             display: none !important;
         }
 
+        /* Floating Cart Button - Bottom Right */
+        .floating-cart {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #2d2a24;
+            color: #f2ede6;
+            padding: 1rem 1.5rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+            cursor: pointer;
+            z-index: 100;
+            border: none;
+        }
+
+        .floating-cart:hover {
+            transform: scale(1.05);
+            background: #4d463c;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-cart i {
+            font-size: 1.3rem;
+            color: #d4c5b2;
+        }
+
+        .floating-cart .cart-count {
+            background: #b8a48c;
+            color: #1e1e1e;
+            padding: 0.15rem 0.7rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .floating-cart .cart-total {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-left: 2px;
+        }
+
         /* Cart Modal */
         .cart-modal {
             display: none;
@@ -485,6 +461,7 @@
         @media (max-width: 600px) {
             body {
                 padding: 1.2rem 0.8rem;
+                padding-bottom: 6rem;
             }
             .shop-header h1 {
                 font-size: 1.5rem;
@@ -512,6 +489,15 @@
                 padding: 1.5rem;
                 max-height: 90vh;
             }
+            .floating-cart {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            .floating-cart i {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -519,34 +505,29 @@
     <div class="container">
 
         <header class="shop-header">
-            <h1><i class="fas fa-pen-fancy"></i> <span id="storeTitle">Zoie · Icon Store</span></h1>
+            <h1><i class="fas fa-pen-fancy"></i> <span id="storeTitle">Zoie</span></h1>
             <div class="header-controls">
                 <div class="lang-toggle">
                     <button id="langAmh" class="active">አማርኛ</button>
                     <button id="langEng">English</button>
                 </div>
-                <div class="cart-badge" id="cartBadge">
-                    <i class="fas fa-shopping-bag"></i> <span id="cartLabel">cart</span>
-                    <span id="cartCount">0</span>
-                    <span class="cart-total" id="cartTotal"></span>
-                </div>
             </div>
         </header>
-
-        <div class="filter-bar">
-            <span class="tag active"><i class="fas fa-th"></i> <span class="filter-all">ሁሉም</span></span>
-            <span class="tag"><i class="far fa-star"></i> <span class="filter-featured">ተለይተው</span></span>
-            <span class="tag"><i class="fas fa-tag"></i> <span class="filter-minimal">ዝቅተኛ</span></span>
-            <span style="margin-left: auto; opacity: 0.6; font-size: 0.85rem;"><i class="fas fa-circle"></i> <span id="iconCount">16</span> <span id="iconsLabel">አዶዎች</span></span>
-        </div>
 
         <div class="icon-grid" id="iconGrid"></div>
 
         <div class="shop-footer">
-            <span><i class="far fa-copyright"></i> <span id="footerLeft">Zoie · ዲጂታል አዶዎች</span></span>
+            <span><i class="far fa-copyright"></i> <span id="footerLeft">Zoie</span></span>
             <span><i class="fas fa-credit-card"></i> <span id="footerRight">መክፈያ</span></span>
         </div>
     </div>
+
+    <!-- Floating Cart Button -->
+    <button class="floating-cart" id="floatingCart">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cartCount">0</span>
+        <span class="cart-total" id="cartTotal"></span>
+    </button>
 
     <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
@@ -667,7 +648,7 @@
             }
 
             // ============================================================
-            // CHECKOUT - SMS
+            // CHECKOUT - SMS (Opens default SMS app)
             // ============================================================
             function checkoutViaSMS() {
                 if (cart.length === 0) {
@@ -675,7 +656,6 @@
                     return;
                 }
 
-                // Build the SMS message
                 let message = '🛒 Zoie Icon Store Order\n\n';
                 let total = 0;
 
@@ -690,22 +670,15 @@
                 message += `Total: ${total} ብር\n\n`;
                 message += `Thank you for your order! 🙏`;
 
-                // Encode the message for URL
                 const encodedMessage = encodeURIComponent(message);
-
-                // Create SMS URL
-                // For Android/iPhone: sms:phone?body=message
                 const smsUrl = `sms:${PHONE_NUMBER}?body=${encodedMessage}`;
 
-                // Try to open SMS app
                 try {
                     window.location.href = smsUrl;
                 } catch (e) {
-                    // Fallback for some browsers
                     window.open(smsUrl, '_blank');
                 }
 
-                // Clear cart after sending SMS
                 setTimeout(() => {
                     clearCart();
                     cartModal.classList.remove('active');
@@ -721,6 +694,7 @@
             const cartModal = document.getElementById('cartModal');
             const cartItemsList = document.getElementById('cartItemsList');
             const cartTotalAmount = document.getElementById('cartTotalAmount');
+            const floatingCart = document.getElementById('floatingCart');
 
             let currentLang = 'amh';
             let allCards = [];
@@ -735,7 +709,6 @@
                 card.className = 'icon-card';
                 card.dataset.index = index;
 
-                // Image wrapper
                 const wrapper = document.createElement('div');
                 wrapper.className = 'image-wrapper';
 
@@ -755,13 +728,11 @@
                 wrapper.appendChild(img);
                 card.appendChild(wrapper);
 
-                // Icon number
                 const numberEl = document.createElement('div');
                 numberEl.className = 'icon-number';
                 numberEl.textContent = `#${index + 1}`;
                 card.appendChild(numberEl);
 
-                // Size options
                 const sizeContainer = document.createElement('div');
                 sizeContainer.className = 'size-options';
 
@@ -779,13 +750,11 @@
 
                 card.appendChild(sizeContainer);
 
-                // Price display
                 const priceEl = document.createElement('div');
                 priceEl.className = 'price';
                 priceEl.innerHTML = `${PRICES.A5} <small>ብር</small>`;
                 card.appendChild(priceEl);
 
-                // Add button
                 const btn = document.createElement('button');
                 btn.className = 'btn-add';
                 btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">ጨምር</span>`;
@@ -811,14 +780,10 @@
                     const inCart = isInCart(imgIndex, size);
                     if (inCart) {
                         btn.classList.add('in-cart');
-                        const btnText = btn.querySelector('.btn-text');
-                        btnText.textContent = currentLang === 'amh' ? 'ተጨምሯል' : 'in cart';
                         btn.innerHTML =
                             `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
                     } else {
                         btn.classList.remove('in-cart');
-                        const btnText = btn.querySelector('.btn-text');
-                        btnText.textContent = currentLang === 'amh' ? 'ጨምር' : 'Add';
                         btn.innerHTML =
                             `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
                     }
@@ -840,7 +805,6 @@
                     const size = this.dataset.size;
 
                     if (isInCart(index, size)) {
-                        // Remove from cart
                         const itemIndex = cart.findIndex(item => item.imageIndex === index && item.size === size);
                         if (itemIndex !== -1) {
                             cart.splice(itemIndex, 1);
@@ -855,7 +819,6 @@
                     updateButtonState(index, size);
                     updateCartUI();
 
-                    // Feedback
                     const orig = this.innerHTML;
                     this.innerHTML =
                         `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨመረ' : 'added'}</span>`;
@@ -881,7 +844,6 @@
                     index: index
                 });
 
-                // Check initial cart state
                 updateButtonState(index, 'A5');
             });
 
@@ -894,10 +856,9 @@
 
                 if (cartSpan) cartSpan.textContent = totalItems;
                 if (cartTotalSpan) {
-                    cartTotalSpan.textContent = totalItems > 0 ? `(${totalPrice} ብር)` : '';
+                    cartTotalSpan.textContent = totalItems > 0 ? `${totalPrice} ብር` : '';
                 }
 
-                // Update all card buttons
                 allCards.forEach(cardData => {
                     const size = cardData.selectedSize || 'A5';
                     const inCart = isInCart(cardData.index, size);
@@ -948,7 +909,6 @@
 
                 cartItemsList.innerHTML = html;
 
-                // Remove buttons
                 document.querySelectorAll('.cart-item-remove').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const idx = parseInt(this.dataset.index);
@@ -984,13 +944,8 @@
             const langAmhBtn = document.getElementById('langAmh');
             const langEngBtn = document.getElementById('langEng');
             const storeTitle = document.getElementById('storeTitle');
-            const filterAll = document.querySelector('.filter-all');
-            const filterFeatured = document.querySelector('.filter-featured');
-            const filterMinimal = document.querySelector('.filter-minimal');
-            const iconsLabel = document.getElementById('iconsLabel');
             const footerLeft = document.getElementById('footerLeft');
             const footerRight = document.getElementById('footerRight');
-            const cartLabel = document.getElementById('cartLabel');
             const cartModalTitle = document.getElementById('cartModalTitle');
             const totalLabel = document.getElementById('totalLabel');
             const checkoutText = document.getElementById('checkoutText');
@@ -998,39 +953,27 @@
 
             const translations = {
                 amh: {
-                    title: 'Zoie · አዶዎች',
-                    filterAll: 'ሁሉም',
-                    filterFeatured: 'ተለይተው',
-                    filterMinimal: 'ዝቅተኛ',
-                    iconsLabel: 'አዶዎች',
-                    cart: 'ጋሪ',
-                    btnText: 'ጨምር',
-                    btnAdded: 'ተጨመረ',
-                    btnInCart: 'ተጨምሯል',
-                    footerLeft: 'Zoie · ዲጂታል አዶዎች',
+                    title: 'Zoie',
+                    footerLeft: 'Zoie',
                     footerRight: 'መክፈያ',
                     cartModalTitle: '🛒 ጋሪዎ',
                     totalLabel: 'ጠቅላላ',
                     checkoutText: 'ኤስኤምኤስ ላክ',
                     clearText: 'አጽዳ',
+                    btnText: 'ጨምር',
+                    btnInCart: 'ተጨምሯል',
                     emptyCart: 'ጋሪዎ ባዶ ነው'
                 },
                 eng: {
-                    title: 'Zoie · Icons',
-                    filterAll: 'All',
-                    filterFeatured: 'Featured',
-                    filterMinimal: 'Minimal',
-                    iconsLabel: 'Icons',
-                    cart: 'Cart',
-                    btnText: 'Add',
-                    btnAdded: 'Added',
-                    btnInCart: 'in cart',
-                    footerLeft: 'Zoie · Digital Icons',
+                    title: 'Zoie',
+                    footerLeft: 'Zoie',
                     footerRight: 'Checkout',
                     cartModalTitle: '🛒 Your Cart',
                     totalLabel: 'Total',
                     checkoutText: 'Send SMS',
                     clearText: 'Clear',
+                    btnText: 'Add',
+                    btnInCart: 'in cart',
                     emptyCart: 'Your cart is empty'
                 }
             };
@@ -1040,11 +983,6 @@
                 const t = translations[lang];
 
                 storeTitle.textContent = t.title;
-                filterAll.textContent = t.filterAll;
-                filterFeatured.textContent = t.filterFeatured;
-                filterMinimal.textContent = t.filterMinimal;
-                iconsLabel.textContent = t.iconsLabel;
-                cartLabel.textContent = t.cart;
                 footerLeft.textContent = t.footerLeft;
                 footerRight.textContent = t.footerRight;
                 cartModalTitle.textContent = t.cartModalTitle;
@@ -1053,16 +991,8 @@
                 clearText.textContent = t.clearText;
 
                 allCards.forEach(item => {
-                    const btnText = item.btn.querySelector('.btn-text');
                     const size = item.selectedSize || 'A5';
                     const inCart = isInCart(item.index, size);
-                    if (btnText) {
-                        if (inCart) {
-                            btnText.textContent = t.btnInCart;
-                        } else {
-                            btnText.textContent = t.btnText;
-                        }
-                    }
                     const btn = item.btn;
                     if (inCart) {
                         btn.innerHTML =
@@ -1086,7 +1016,7 @@
             // ============================================================
             // CART MODAL EVENTS
             // ============================================================
-            document.getElementById('cartBadge').addEventListener('click', function() {
+            floatingCart.addEventListener('click', function() {
                 renderCartModal();
                 cartModal.classList.add('active');
             });
