@@ -560,7 +560,7 @@
             </div>
             <div class="cart-actions">
                 <button class="btn-checkout" id="checkoutBtn">
-                    <i class="fas fa-whatsapp"></i> <span id="checkoutText">Checkout</span>
+                    <i class="fas fa-sms"></i> <span id="checkoutText">Send SMS</span>
                 </button>
                 <button class="btn-clear-cart" id="clearCartBtn">
                     <i class="fas fa-trash"></i> <span id="clearText">Clear</span>
@@ -594,7 +594,7 @@
             ];
 
             // ============================================================
-            // PRICES
+            // PRICES & PHONE NUMBER
             // ============================================================
             const PRICES = {
                 A5: 400,
@@ -666,8 +666,50 @@
                 return cart.some(item => item.imageIndex === imageIndex && item.size === size);
             }
 
-            function getCartItem(imageIndex, size) {
-                return cart.find(item => item.imageIndex === imageIndex && item.size === size);
+            // ============================================================
+            // CHECKOUT - SMS
+            // ============================================================
+            function checkoutViaSMS() {
+                if (cart.length === 0) {
+                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
+                    return;
+                }
+
+                // Build the SMS message
+                let message = '🛒 Zoie Icon Store Order\n\n';
+                let total = 0;
+
+                cart.forEach((item, idx) => {
+                    const sizeLabel = item.size === 'A5' ? 'A5' : '½ A5';
+                    const subtotal = item.price * item.quantity;
+                    total += subtotal;
+                    message += `${idx + 1}. Icon #${item.imageIndex + 1} (${sizeLabel}) × ${item.quantity} = ${subtotal} ብር\n`;
+                });
+
+                message += `\n────────────────\n`;
+                message += `Total: ${total} ብር\n\n`;
+                message += `Thank you for your order! 🙏`;
+
+                // Encode the message for URL
+                const encodedMessage = encodeURIComponent(message);
+
+                // Create SMS URL
+                // For Android/iPhone: sms:phone?body=message
+                const smsUrl = `sms:${PHONE_NUMBER}?body=${encodedMessage}`;
+
+                // Try to open SMS app
+                try {
+                    window.location.href = smsUrl;
+                } catch (e) {
+                    // Fallback for some browsers
+                    window.open(smsUrl, '_blank');
+                }
+
+                // Clear cart after sending SMS
+                setTimeout(() => {
+                    clearCart();
+                    cartModal.classList.remove('active');
+                }, 1000);
             }
 
             // ============================================================
@@ -771,12 +813,14 @@
                         btn.classList.add('in-cart');
                         const btnText = btn.querySelector('.btn-text');
                         btnText.textContent = currentLang === 'amh' ? 'ተጨምሯል' : 'in cart';
-                        btn.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
+                        btn.innerHTML =
+                            `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
                     } else {
                         btn.classList.remove('in-cart');
                         const btnText = btn.querySelector('.btn-text');
                         btnText.textContent = currentLang === 'amh' ? 'ጨምር' : 'Add';
-                        btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
+                        btn.innerHTML =
+                            `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
                     }
                 }
 
@@ -813,7 +857,8 @@
 
                     // Feedback
                     const orig = this.innerHTML;
-                    this.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨመረ' : 'added'}</span>`;
+                    this.innerHTML =
+                        `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨመረ' : 'added'}</span>`;
                     this.style.background = '#3a6b4b';
                     this.style.borderColor = '#2b5a3a';
                     setTimeout(() => {
@@ -859,10 +904,12 @@
                     const btn = cardData.btn;
                     if (inCart) {
                         btn.classList.add('in-cart');
-                        btn.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
+                        btn.innerHTML =
+                            `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
                     } else {
                         btn.classList.remove('in-cart');
-                        btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
+                        btn.innerHTML =
+                            `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
                     }
                 });
             }
@@ -906,7 +953,6 @@
                     btn.addEventListener('click', function() {
                         const idx = parseInt(this.dataset.index);
                         removeFromCart(idx);
-                        // Update all card buttons
                         allCards.forEach(cardData => {
                             const size = cardData.selectedSize || 'A5';
                             updateButtonStateForCard(cardData, size);
@@ -923,42 +969,13 @@
                 const btn = cardData.btn;
                 if (inCart) {
                     btn.classList.add('in-cart');
-                    btn.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
+                    btn.innerHTML =
+                        `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
                 } else {
                     btn.classList.remove('in-cart');
-                    btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
+                    btn.innerHTML =
+                        `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
                 }
-            }
-
-            // ============================================================
-            // CHECKOUT - WhatsApp
-            // ============================================================
-            function checkout() {
-                if (cart.length === 0) {
-                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
-                    return;
-                }
-
-                let message = '🛒 *Zoie Icon Store Order*%0A%0A';
-                let total = 0;
-
-                cart.forEach((item, idx) => {
-                    const sizeLabel = item.size === 'A5' ? 'A5' : '½ A5';
-                    const subtotal = item.price * item.quantity;
-                    total += subtotal;
-                    message += `${idx + 1}. Icon #${item.imageIndex + 1} (${sizeLabel}) × ${item.quantity} = ${subtotal} ብር%0A`;
-                });
-
-                message += `%0A────────────────%0A`;
-                message += `*Total: ${total} ብር*%0A%0A`;
-                message += `Thank you for your order! 🙏`;
-
-                const url = `https://wa.me/${PHONE_NUMBER}?text=${message}`;
-                window.open(url, '_blank');
-
-                // Clear cart after checkout
-                clearCart();
-                cartModal.classList.remove('active');
             }
 
             // ============================================================
@@ -994,7 +1011,7 @@
                     footerRight: 'መክፈያ',
                     cartModalTitle: '🛒 ጋሪዎ',
                     totalLabel: 'ጠቅላላ',
-                    checkoutText: 'መግዛት',
+                    checkoutText: 'ኤስኤምኤስ ላክ',
                     clearText: 'አጽዳ',
                     emptyCart: 'ጋሪዎ ባዶ ነው'
                 },
@@ -1012,7 +1029,7 @@
                     footerRight: 'Checkout',
                     cartModalTitle: '🛒 Your Cart',
                     totalLabel: 'Total',
-                    checkoutText: 'Checkout',
+                    checkoutText: 'Send SMS',
                     clearText: 'Clear',
                     emptyCart: 'Your cart is empty'
                 }
@@ -1046,7 +1063,6 @@
                             btnText.textContent = t.btnText;
                         }
                     }
-                    // Update button HTML
                     const btn = item.btn;
                     if (inCart) {
                         btn.innerHTML =
@@ -1093,7 +1109,7 @@
                 }
             });
 
-            document.getElementById('checkoutBtn').addEventListener('click', checkout);
+            document.getElementById('checkoutBtn').addEventListener('click', checkoutViaSMS);
 
             // ============================================================
             // KEYBOARD SHORTCUT - ESC to close modal
@@ -1114,7 +1130,7 @@
 
             console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded`);
             console.log(`📐 Sizes: A5 (${PRICES.A5} ETB) and Half A5 (${PRICES.HALF} ETB)`);
-            console.log(`📱 Checkout via WhatsApp: ${PHONE_NUMBER}`);
+            console.log(`📱 Checkout via SMS: ${PHONE_NUMBER}`);
             console.log(`💾 Cart saved in localStorage`);
         })();
     </script>
