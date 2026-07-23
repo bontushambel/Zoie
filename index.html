@@ -99,6 +99,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
             transition: 0.2s;
             cursor: pointer;
+            position: relative;
         }
 
         .cart-badge i {
@@ -114,6 +115,12 @@
             font-weight: 600;
             font-size: 0.9rem;
             margin-left: 4px;
+        }
+
+        .cart-badge .cart-total {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-left: 2px;
         }
 
         .filter-bar {
@@ -218,6 +225,12 @@
             word-break: break-all;
         }
 
+        .icon-number {
+            font-size: 0.7rem;
+            color: #b5a18b;
+            margin-bottom: 0.3rem;
+        }
+
         .size-options {
             display: flex;
             gap: 0.5rem;
@@ -292,6 +305,11 @@
             transform: scale(0.95);
         }
 
+        .btn-add.in-cart {
+            background: #3a6b4b;
+            border-color: #2b5a3a;
+        }
+
         .btn-add:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -315,6 +333,153 @@
 
         .hidden {
             display: none !important;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .cart-modal.active {
+            display: flex;
+        }
+
+        .cart-modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            padding: 2rem;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .cart-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #5d5346;
+            background: none;
+            border: none;
+        }
+
+        .cart-modal-close:hover {
+            color: #1e1b17;
+        }
+
+        .cart-modal h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #2d2a24;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #efebe6;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+        }
+
+        .cart-item-size {
+            font-size: 0.8rem;
+            color: #7f7261;
+        }
+
+        .cart-item-price {
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #c0392b;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.2rem 0.5rem;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-top: 2px solid #dcd8d0;
+            margin-top: 0.5rem;
+        }
+
+        .cart-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-checkout {
+            flex: 1;
+            background: #2d2a24;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            min-width: 120px;
+        }
+
+        .btn-checkout:hover {
+            background: #4d463c;
+        }
+
+        .btn-clear-cart {
+            background: #ece7df;
+            color: #5d5346;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-clear-cart:hover {
+            background: #dcd8d0;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #7f7261;
+            padding: 2rem 0;
+        }
+
+        .empty-cart i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
         }
 
         @media (max-width: 600px) {
@@ -343,6 +508,10 @@
             .size-btn .price-tag {
                 font-size: 0.6rem;
             }
+            .cart-modal-content {
+                padding: 1.5rem;
+                max-height: 90vh;
+            }
         }
     </style>
 </head>
@@ -359,6 +528,7 @@
                 <div class="cart-badge" id="cartBadge">
                     <i class="fas fa-shopping-bag"></i> <span id="cartLabel">cart</span>
                     <span id="cartCount">0</span>
+                    <span class="cart-total" id="cartTotal"></span>
                 </div>
             </div>
         </header>
@@ -378,10 +548,31 @@
         </div>
     </div>
 
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-content">
+            <button class="cart-modal-close" id="cartModalClose">&times;</button>
+            <h2 id="cartModalTitle">🛒 Your Cart</h2>
+            <div id="cartItemsList"></div>
+            <div class="cart-total">
+                <span id="totalLabel">Total</span>
+                <span id="cartTotalAmount">0 ብር</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn-checkout" id="checkoutBtn">
+                    <i class="fas fa-whatsapp"></i> <span id="checkoutText">Checkout</span>
+                </button>
+                <button class="btn-clear-cart" id="clearCartBtn">
+                    <i class="fas fa-trash"></i> <span id="clearText">Clear</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function() {
             // ============================================================
-            // IMAGE FILENAMES (must match your repository)
+            // IMAGE FILENAMES
             // ============================================================
             const imageFilenames = [
                 "-5848072967282167192_121.jpg",
@@ -404,36 +595,97 @@
 
             // ============================================================
             // PRICES
-            // A5: 400 ETB, Half A5: 200 ETB
             // ============================================================
             const PRICES = {
                 A5: 400,
                 HALF: 200
             };
 
+            const PHONE_NUMBER = '0940640089';
+
             // ============================================================
-            // BUILD THE GRID
+            // CART MANAGEMENT (localStorage)
             // ============================================================
-            const grid = document.getElementById('iconGrid');
-            if (!grid) return;
+            let cart = [];
 
-            let cartItems = 0;
-            const cartSpan = document.getElementById('cartCount');
-            const cartLabel = document.getElementById('cartLabel');
-
-            let currentLang = 'amh';
-
-            function updateCart() {
-                if (cartSpan) cartSpan.textContent = cartItems;
-                if (cartLabel) {
-                    cartLabel.textContent = currentLang === 'amh' ? 'ጋሪ' : 'cart';
+            function loadCart() {
+                try {
+                    const saved = localStorage.getItem('zoie_cart');
+                    if (saved) {
+                        cart = JSON.parse(saved);
+                    }
+                } catch (e) {
+                    cart = [];
                 }
             }
 
-            // Store all card data for language switching
+            function saveCart() {
+                localStorage.setItem('zoie_cart', JSON.stringify(cart));
+            }
+
+            function addToCart(imageIndex, size, price) {
+                const existing = cart.find(item => item.imageIndex === imageIndex && item.size === size);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({
+                        imageIndex: imageIndex,
+                        filename: imageFilenames[imageIndex],
+                        size: size,
+                        price: price,
+                        quantity: 1
+                    });
+                }
+                saveCart();
+                updateCartUI();
+            }
+
+            function removeFromCart(index) {
+                cart.splice(index, 1);
+                saveCart();
+                updateCartUI();
+                renderCartModal();
+            }
+
+            function clearCart() {
+                cart = [];
+                saveCart();
+                updateCartUI();
+                renderCartModal();
+            }
+
+            function getTotalItems() {
+                return cart.reduce((sum, item) => sum + item.quantity, 0);
+            }
+
+            function getTotalPrice() {
+                return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }
+
+            function isInCart(imageIndex, size) {
+                return cart.some(item => item.imageIndex === imageIndex && item.size === size);
+            }
+
+            function getCartItem(imageIndex, size) {
+                return cart.find(item => item.imageIndex === imageIndex && item.size === size);
+            }
+
+            // ============================================================
+            // UI ELEMENTS
+            // ============================================================
+            const grid = document.getElementById('iconGrid');
+            const cartSpan = document.getElementById('cartCount');
+            const cartTotalSpan = document.getElementById('cartTotal');
+            const cartModal = document.getElementById('cartModal');
+            const cartItemsList = document.getElementById('cartItemsList');
+            const cartTotalAmount = document.getElementById('cartTotalAmount');
+
+            let currentLang = 'amh';
             let allCards = [];
 
-            // Base URL for images
+            // ============================================================
+            // BUILD THE GRID
+            // ============================================================
             const baseUrl = 'https://raw.githubusercontent.com/bontushambel/Zoie/main/';
 
             imageFilenames.forEach((filename, index) => {
@@ -461,18 +713,22 @@
                 wrapper.appendChild(img);
                 card.appendChild(wrapper);
 
-                // Size options: A5 and Half A5
+                // Icon number
+                const numberEl = document.createElement('div');
+                numberEl.className = 'icon-number';
+                numberEl.textContent = `#${index + 1}`;
+                card.appendChild(numberEl);
+
+                // Size options
                 const sizeContainer = document.createElement('div');
                 sizeContainer.className = 'size-options';
 
-                // A5 button
                 const a5Btn = document.createElement('button');
                 a5Btn.className = 'size-btn active';
                 a5Btn.dataset.size = 'A5';
                 a5Btn.innerHTML = `A5 <span class="price-tag">${PRICES.A5} ብር</span>`;
                 sizeContainer.appendChild(a5Btn);
 
-                // Half A5 button
                 const halfBtn = document.createElement('button');
                 halfBtn.className = 'size-btn';
                 halfBtn.dataset.size = 'HALF';
@@ -481,7 +737,7 @@
 
                 card.appendChild(sizeContainer);
 
-                // Price display (will update based on selection)
+                // Price display
                 const priceEl = document.createElement('div');
                 priceEl.className = 'price';
                 priceEl.innerHTML = `${PRICES.A5} <small>ብር</small>`;
@@ -494,7 +750,6 @@
                 btn.dataset.size = 'A5';
                 btn.dataset.price = PRICES.A5;
 
-                // Size selection logic
                 let selectedSize = 'A5';
 
                 function selectSize(size) {
@@ -504,9 +759,25 @@
                     btn.dataset.size = size;
                     btn.dataset.price = price;
 
-                    // Update button styles
                     a5Btn.classList.toggle('active', size === 'A5');
                     halfBtn.classList.toggle('active', size === 'HALF');
+
+                    updateButtonState(index, size);
+                }
+
+                function updateButtonState(imgIndex, size) {
+                    const inCart = isInCart(imgIndex, size);
+                    if (inCart) {
+                        btn.classList.add('in-cart');
+                        const btnText = btn.querySelector('.btn-text');
+                        btnText.textContent = currentLang === 'amh' ? 'ተጨምሯል' : 'in cart';
+                        btn.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
+                    } else {
+                        btn.classList.remove('in-cart');
+                        const btnText = btn.querySelector('.btn-text');
+                        btnText.textContent = currentLang === 'amh' ? 'ጨምር' : 'Add';
+                        btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
+                    }
                 }
 
                 a5Btn.addEventListener('click', function(e) {
@@ -519,13 +790,29 @@
                     selectSize('HALF');
                 });
 
-                // Add to cart
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    cartItems += 1;
-                    updateCart();
+                    const price = parseInt(this.dataset.price);
+                    const size = this.dataset.size;
+
+                    if (isInCart(index, size)) {
+                        // Remove from cart
+                        const itemIndex = cart.findIndex(item => item.imageIndex === index && item.size === size);
+                        if (itemIndex !== -1) {
+                            cart.splice(itemIndex, 1);
+                            saveCart();
+                            updateCartUI();
+                            updateButtonState(index, size);
+                        }
+                        return;
+                    }
+
+                    addToCart(index, size, price);
+                    updateButtonState(index, size);
+                    updateCartUI();
+
+                    // Feedback
                     const orig = this.innerHTML;
-                    const sizeLabel = selectedSize === 'A5' ? 'A5' : '½ A5';
                     this.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨመረ' : 'added'}</span>`;
                     this.style.background = '#3a6b4b';
                     this.style.borderColor = '#2b5a3a';
@@ -533,23 +820,146 @@
                         this.innerHTML = orig;
                         this.style.background = '#1e1b17';
                         this.style.borderColor = '#2d2a24';
-                    }, 1200);
-                    console.log(`➕ Added: ${filename} (${sizeLabel}, ${btn.dataset.price} ETB)`);
+                    }, 800);
                 });
 
                 card.appendChild(btn);
                 grid.appendChild(card);
 
-                // Store reference for language switching
                 allCards.push({
                     card: card,
                     btn: btn,
                     a5Btn: a5Btn,
                     halfBtn: halfBtn,
                     priceEl: priceEl,
-                    selectedSize: 'A5'
+                    selectedSize: 'A5',
+                    index: index
                 });
+
+                // Check initial cart state
+                updateButtonState(index, 'A5');
             });
+
+            // ============================================================
+            // UPDATE CART UI
+            // ============================================================
+            function updateCartUI() {
+                const totalItems = getTotalItems();
+                const totalPrice = getTotalPrice();
+
+                if (cartSpan) cartSpan.textContent = totalItems;
+                if (cartTotalSpan) {
+                    cartTotalSpan.textContent = totalItems > 0 ? `(${totalPrice} ብር)` : '';
+                }
+
+                // Update all card buttons
+                allCards.forEach(cardData => {
+                    const size = cardData.selectedSize || 'A5';
+                    const inCart = isInCart(cardData.index, size);
+                    const btn = cardData.btn;
+                    if (inCart) {
+                        btn.classList.add('in-cart');
+                        btn.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
+                    } else {
+                        btn.classList.remove('in-cart');
+                        btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
+                    }
+                });
+            }
+
+            // ============================================================
+            // CART MODAL
+            // ============================================================
+            function renderCartModal() {
+                if (cart.length === 0) {
+                    cartItemsList.innerHTML = `
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-bag"></i>
+                            <p>${currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው' : 'Your cart is empty'}</p>
+                        </div>
+                    `;
+                    cartTotalAmount.textContent = '0 ብር';
+                    return;
+                }
+
+                let html = '';
+                cart.forEach((item, idx) => {
+                    const sizeLabel = item.size === 'A5' ? 'A5' : '½ A5';
+                    html += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">Icon #${item.imageIndex + 1}</div>
+                                <div class="cart-item-size">${sizeLabel} × ${item.quantity}</div>
+                            </div>
+                            <div class="cart-item-price">${item.price * item.quantity} ብር</div>
+                            <button class="cart-item-remove" data-index="${idx}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                cartItemsList.innerHTML = html;
+
+                // Remove buttons
+                document.querySelectorAll('.cart-item-remove').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        removeFromCart(idx);
+                        // Update all card buttons
+                        allCards.forEach(cardData => {
+                            const size = cardData.selectedSize || 'A5';
+                            updateButtonStateForCard(cardData, size);
+                        });
+                    });
+                });
+
+                const total = getTotalPrice();
+                cartTotalAmount.textContent = `${total} ብር`;
+            }
+
+            function updateButtonStateForCard(cardData, size) {
+                const inCart = isInCart(cardData.index, size);
+                const btn = cardData.btn;
+                if (inCart) {
+                    btn.classList.add('in-cart');
+                    btn.innerHTML = `<i class="fas fa-check"></i> <span class="btn-text">${currentLang === 'amh' ? 'ተጨምሯል' : 'in cart'}</span>`;
+                } else {
+                    btn.classList.remove('in-cart');
+                    btn.innerHTML = `<i class="fas fa-plus-circle"></i> <span class="btn-text">${currentLang === 'amh' ? 'ጨምር' : 'Add'}</span>`;
+                }
+            }
+
+            // ============================================================
+            // CHECKOUT - WhatsApp
+            // ============================================================
+            function checkout() {
+                if (cart.length === 0) {
+                    alert(currentLang === 'amh' ? 'ጋሪዎ ባዶ ነው!' : 'Your cart is empty!');
+                    return;
+                }
+
+                let message = '🛒 *Zoie Icon Store Order*%0A%0A';
+                let total = 0;
+
+                cart.forEach((item, idx) => {
+                    const sizeLabel = item.size === 'A5' ? 'A5' : '½ A5';
+                    const subtotal = item.price * item.quantity;
+                    total += subtotal;
+                    message += `${idx + 1}. Icon #${item.imageIndex + 1} (${sizeLabel}) × ${item.quantity} = ${subtotal} ብር%0A`;
+                });
+
+                message += `%0A────────────────%0A`;
+                message += `*Total: ${total} ብር*%0A%0A`;
+                message += `Thank you for your order! 🙏`;
+
+                const url = `https://wa.me/${PHONE_NUMBER}?text=${message}`;
+                window.open(url, '_blank');
+
+                // Clear cart after checkout
+                clearCart();
+                cartModal.classList.remove('active');
+            }
 
             // ============================================================
             // LANGUAGE TOGGLE
@@ -563,6 +973,11 @@
             const iconsLabel = document.getElementById('iconsLabel');
             const footerLeft = document.getElementById('footerLeft');
             const footerRight = document.getElementById('footerRight');
+            const cartLabel = document.getElementById('cartLabel');
+            const cartModalTitle = document.getElementById('cartModalTitle');
+            const totalLabel = document.getElementById('totalLabel');
+            const checkoutText = document.getElementById('checkoutText');
+            const clearText = document.getElementById('clearText');
 
             const translations = {
                 amh: {
@@ -574,8 +989,14 @@
                     cart: 'ጋሪ',
                     btnText: 'ጨምር',
                     btnAdded: 'ተጨመረ',
+                    btnInCart: 'ተጨምሯል',
                     footerLeft: 'Zoie · ዲጂታል አዶዎች',
-                    footerRight: 'መክፈያ'
+                    footerRight: 'መክፈያ',
+                    cartModalTitle: '🛒 ጋሪዎ',
+                    totalLabel: 'ጠቅላላ',
+                    checkoutText: 'መግዛት',
+                    clearText: 'አጽዳ',
+                    emptyCart: 'ጋሪዎ ባዶ ነው'
                 },
                 eng: {
                     title: 'Zoie · Icons',
@@ -586,8 +1007,14 @@
                     cart: 'Cart',
                     btnText: 'Add',
                     btnAdded: 'Added',
+                    btnInCart: 'in cart',
                     footerLeft: 'Zoie · Digital Icons',
-                    footerRight: 'Checkout'
+                    footerRight: 'Checkout',
+                    cartModalTitle: '🛒 Your Cart',
+                    totalLabel: 'Total',
+                    checkoutText: 'Checkout',
+                    clearText: 'Clear',
+                    emptyCart: 'Your cart is empty'
                 }
             };
 
@@ -603,15 +1030,35 @@
                 cartLabel.textContent = t.cart;
                 footerLeft.textContent = t.footerLeft;
                 footerRight.textContent = t.footerRight;
+                cartModalTitle.textContent = t.cartModalTitle;
+                totalLabel.textContent = t.totalLabel;
+                checkoutText.textContent = t.checkoutText;
+                clearText.textContent = t.clearText;
 
                 allCards.forEach(item => {
                     const btnText = item.btn.querySelector('.btn-text');
+                    const size = item.selectedSize || 'A5';
+                    const inCart = isInCart(item.index, size);
                     if (btnText) {
-                        btnText.textContent = t.btnText;
+                        if (inCart) {
+                            btnText.textContent = t.btnInCart;
+                        } else {
+                            btnText.textContent = t.btnText;
+                        }
+                    }
+                    // Update button HTML
+                    const btn = item.btn;
+                    if (inCart) {
+                        btn.innerHTML =
+                            `<i class="fas fa-check"></i> <span class="btn-text">${t.btnInCart}</span>`;
+                    } else {
+                        btn.innerHTML =
+                            `<i class="fas fa-plus-circle"></i> <span class="btn-text">${t.btnText}</span>`;
                     }
                 });
 
-                updateCart();
+                updateCartUI();
+                renderCartModal();
 
                 langAmhBtn.classList.toggle('active', lang === 'amh');
                 langEngBtn.classList.toggle('active', lang === 'eng');
@@ -621,29 +1068,54 @@
             langEngBtn.addEventListener('click', () => setLanguage('eng'));
 
             // ============================================================
-            // CART BADGE CLICK
+            // CART MODAL EVENTS
             // ============================================================
-            const badge = document.getElementById('cartBadge');
-            if (badge) {
-                badge.addEventListener('click', function() {
-                    if (cartItems === 0) {
-                        alert(currentLang === 'amh' ? '🛒 ጋሪዎ ባዶ ነው። አዶዎችን ይጨምሩ!' : '🛒 Your cart is empty. Add some icons!');
-                    } else {
-                        alert(currentLang === 'amh' ?
-                            `🛒 በጋሪዎ ውስጥ ${cartItems} አዶ ${cartItems > 1 ? 'ዎች' : ''} አሉ።` :
-                            `🛒 You have ${cartItems} item${cartItems > 1 ? 's' : ''} in your cart.`);
-                    }
-                });
-            }
+            document.getElementById('cartBadge').addEventListener('click', function() {
+                renderCartModal();
+                cartModal.classList.add('active');
+            });
+
+            document.getElementById('cartModalClose').addEventListener('click', function() {
+                cartModal.classList.remove('active');
+            });
+
+            cartModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    cartModal.classList.remove('active');
+                }
+            });
+
+            document.getElementById('clearCartBtn').addEventListener('click', function() {
+                if (cart.length === 0) return;
+                if (confirm(currentLang === 'amh' ? 'ሁሉንም ከጋሪ ማስወገድ ይፈልጋሉ?' : 'Clear all items from cart?')) {
+                    clearCart();
+                    renderCartModal();
+                }
+            });
+
+            document.getElementById('checkoutBtn').addEventListener('click', checkout);
+
+            // ============================================================
+            // KEYBOARD SHORTCUT - ESC to close modal
+            // ============================================================
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && cartModal.classList.contains('active')) {
+                    cartModal.classList.remove('active');
+                }
+            });
 
             // ============================================================
             // INITIALIZE
             // ============================================================
+            loadCart();
             setLanguage('amh');
             document.getElementById('iconCount').textContent = imageFilenames.length;
+            updateCartUI();
 
-            console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded from ${baseUrl}`);
-            console.log('📐 Sizes: A5 (400 ETB) and Half A5 (200 ETB)');
+            console.log(`✅ Zoie store ready · ${imageFilenames.length} icons loaded`);
+            console.log(`📐 Sizes: A5 (${PRICES.A5} ETB) and Half A5 (${PRICES.HALF} ETB)`);
+            console.log(`📱 Checkout via WhatsApp: ${PHONE_NUMBER}`);
+            console.log(`💾 Cart saved in localStorage`);
         })();
     </script>
 </body>
